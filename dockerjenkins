@@ -1,0 +1,29 @@
+#Create a directory
+
+rm -rf myapp
+mkdir myapp
+cd myapp
+
+#copy your address book war to current directory
+cp /var/lib/jenkins/workspace/Newpipeline/target/addressbook.war . 
+
+# Start writing your docker file 
+touch dockerfile
+
+cat <<EOT>> dockerfile
+
+FROM tomcat
+MAINTANER mohit
+ADD addressbook.war /usr/local/tomcat/webapps
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
+
+EOT
+
+#BUILD the image from dockerfile
+
+sudo docker build -t mohit0108\myimage:$BUILD_NUMBER
+
+# RUN the image
+
+sudo docker run -itd -P mohit0108\myimage:$BUILD_NUMBER
